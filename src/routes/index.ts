@@ -11,13 +11,13 @@ interface User {
 }
 
 // GET /api/users - Összes felhasználó lekérdezése
-router.get('/users', async (req: Request, res: Response) => {
+router.get('/movies', async (req: Request, res: Response) => {
   try {
-    const users: User[] = await db<User>('users').select('*');
+    const users: User[] = await db<User>('movies').select('*');
     res.json(users);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Hiba történt a felhasználók lekérdezése során.' });
+    res.status(500).json({ message: 'Hiba történt a filmeklekérdezése során.' });
   }
 });
 
