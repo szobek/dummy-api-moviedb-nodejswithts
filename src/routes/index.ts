@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express';
 import db from '../config/knex'; // Importáljuk a Knex példányt
+import { MovieInResponseDto } from '../dtos/movie_in_response';
 
 const router = Router();
 interface Movie{
@@ -14,10 +15,11 @@ interface Movie{
   poster_url: string;
 }
 // GET /api/users - Összes felhasználó lekérdezése
-router.get('/movies', async (req: Request, res: Response) => {
+router.get('', async (req: Request, res: Response) => {
   try {
     const movies: Movie[] = await db<Movie>('movies').select('*');
-    res.json(movies);
+    const dtos:MovieInResponseDto[] = movies.map(movie => new MovieInResponseDto(movie));
+    res.json(dtos);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Hiba történt a filmeklekérdezése során.' });
