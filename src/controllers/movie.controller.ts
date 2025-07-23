@@ -94,10 +94,47 @@ const getAllGenres = async () => {
   return genres;
 };
 
+const getMoviesByGenre = async (genreId: string) => {
+  let movies: MovieInResponseDto[] = [];
+  const query = `
+SELECT
+    m.title ,
+    m.description,
+    m.rating ,
+    m.year ,
+    GROUP_CONCAT(DISTINCT a.fullName SEPARATOR ', ') AS actors,
+    GROUP_CONCAT(DISTINCT g.name SEPARATOR ', ') AS genres
+FROM
+    movies AS m
+    LEFT JOIN \`movie-genre\` AS mg ON m.id = mg.movie_id
+    LEFT JOIN genres AS g ON mg.genre_id = g.id
+    LEFT JOIN \`movie-actors\` AS ma ON m.id = ma.movie_id
+    LEFT JOIN actors AS a ON ma.actor_id = a.id
+WHERE
+    EXISTS (
+        SELECT 1
+        FROM \`movie-genre\` AS szuro_mg
+        WHERE szuro_mg.movie_id = m.id
+          AND szuro_mg.genre_id = ?
+    )
+GROUP BY
+    m.id, m.title, m.description, m.rating, m.year
+ORDER BY
+    m.rating DESC;
+    `
+  await db.raw(query, [genreId]).then((rows: any) => {
+    movies = rows[0].map((movie: any) => new MovieInResponseDto(movie));
+  }).catch((error: any) => {
+    console.error("Error fetching movies by genre:", error);
+  });
+  return movies;
+}
+
 export {
   getAllMovies,
   getMovieById,
   getAllActors,
   getMoviesByActor,
   getAllGenres,
+  getMoviesByGenre
 };

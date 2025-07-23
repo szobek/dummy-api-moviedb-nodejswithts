@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { getAllActors, getAllGenres, getAllMovies, getMovieById, getMoviesByActor } from '../controllers/movie.controller'; 
+import { getAllActors, getAllGenres, getAllMovies, getMovieById, getMoviesByActor, getMoviesByGenre } from '../controllers/movie.controller'; 
 
 const router = Router();
 
@@ -37,6 +37,14 @@ router.get('/genres', async (req: Request, res: Response) => {
     return res.status(404).json({ message: 'No genres found' });
   }
   res.json(genres);
+})
+router.get('/genres/:id', async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const movies = await getMoviesByGenre(id);
+  if (movies.length === 0) {
+    return res.status(404).json({ message: 'No movies found for this genre' });
+  }
+  res.json(movies);
 })
 
 router.get('/:id', async (req: Request, res: Response) => {
