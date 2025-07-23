@@ -39,8 +39,47 @@ try {
 }
 return actors
 }
+
+const getMoviesByActor = async (actorId: string) => {
+  let movies: MovieInResponseDto[] = [];
+  const query = `SELECT
+    m.title ,
+    m.description,
+    m.rating ,
+    m.year ,
+    GROUP_CONCAT(DISTINCT a.fullName SEPARATOR ', ') AS actors,
+    GROUP_CONCAT(DISTINCT g.name SEPARATOR ', ') AS genres
+FROM
+    movies AS m
+    LEFT JOIN \`movie-actors\` AS ma ON m.id = ma.movie_id
+    LEFT JOIN actors AS a ON ma.actor_id = a.id
+    LEFT JOIN \`movie-genre\` AS mg ON m.id = mg.movie_id
+    LEFT JOIN genres AS g ON mg.genre_id = g.id
+WHERE
+    EXISTS (
+        SELECT 1
+        FROM \`movie-actors\` AS ma_szuro
+        WHERE ma_szuro.movie_id = m.id
+          AND ma_szuro.actor_id = ?
+    )
+GROUP BY
+    m.id, m.title, m.description, m.rating, m.year
+ORDER BY
+    m.year DESC;`
+  try {
+    const rows=await db.raw(query,[actorId])
+    movies = rows[0].map((movie: any) => new MovieInResponseDto(movie));
+  } catch (error) {
+    console.error(error);
+  }
+  return movies;
+
+}
+
 export {
     getAllMovies,
     getMovieById,
-    getAllActors
+    getAllActors,
+    getMoviesByActor
+
     };

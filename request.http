@@ -6,3 +6,6 @@ GET http://localhost:3000/api/movies/4
 
 ### get all actors
 GET http://localhost:3000/api/movies/actors
+
+### get movies by actor
+GET http://localhost:3000/api/movies/actors/4
