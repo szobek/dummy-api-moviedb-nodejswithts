@@ -1,6 +1,6 @@
 import express, { Application } from 'express';
 import dotenv from 'dotenv';
-import val from './routes';
+import movieApiRoutes from '../src/routes/movie_api_routes';
 
 dotenv.config();
 
@@ -10,7 +10,7 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 
 // Útvonalak beillesztése
-app.use('/api/movies', val);
+app.use('/api/movies', movieApiRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
