@@ -2,6 +2,7 @@ import db from "../config/knex";
 import { ActorInResponseDto } from "../dtos/actor_in_response";
 import { MovieInResponseDto } from "../dtos/movie_in_response";
 import Movie from "../inerfaces/movie.interface";
+import { Request, Response } from 'express';
 
 const getAllMovies = async () => {
   let dtos: MovieInResponseDto[] = [];
@@ -97,31 +98,31 @@ const getAllGenres = async () => {
 const getMoviesByGenre = async (genreId: string) => {
   let movies: MovieInResponseDto[] = [];
   const query = `
-SELECT
-    m.title ,
+  SELECT
+  m.title ,
     m.description,
     m.rating ,
     m.year ,
     GROUP_CONCAT(DISTINCT a.fullName SEPARATOR ', ') AS actors,
     GROUP_CONCAT(DISTINCT g.name SEPARATOR ', ') AS genres
-FROM
+    FROM
     movies AS m
     LEFT JOIN \`movie-genre\` AS mg ON m.id = mg.movie_id
     LEFT JOIN genres AS g ON mg.genre_id = g.id
     LEFT JOIN \`movie-actors\` AS ma ON m.id = ma.movie_id
     LEFT JOIN actors AS a ON ma.actor_id = a.id
-WHERE
+    WHERE
     EXISTS (
-        SELECT 1
-        FROM \`movie-genre\` AS szuro_mg
-        WHERE szuro_mg.movie_id = m.id
-          AND szuro_mg.genre_id = ?
-    )
-GROUP BY
-    m.id, m.title, m.description, m.rating, m.year
-ORDER BY
-    m.rating DESC;
-    `
+      SELECT 1
+      FROM \`movie-genre\` AS szuro_mg
+      WHERE szuro_mg.movie_id = m.id
+      AND szuro_mg.genre_id = ?
+      )
+      GROUP BY
+      m.id, m.title, m.description, m.rating, m.year
+      ORDER BY
+      m.rating DESC;
+      `
   await db.raw(query, [genreId]).then((rows: any) => {
     movies = rows[0].map((movie: any) => new MovieInResponseDto(movie));
   }).catch((error: any) => {
@@ -130,11 +131,78 @@ ORDER BY
   return movies;
 }
 
+interface SearchRequestBody {
+  genre: number;
+  title: string;
+  actor: string;
+  year: string;
+  rating: number;
+  
+}
+const searchMovies = async (req: Request<{}, {}, SearchRequestBody>, res: Response) => {
+  const query:string = `
+  SELECT
+    m.title ,
+    m.description,
+    m.rating ,
+    m.year ,
+    GROUP_CONCAT(DISTINCT a.fullName SEPARATOR ', ') AS actors,
+    GROUP_CONCAT(DISTINCT g.name SEPARATOR ', ') AS genres
+FROM
+    movies AS m
+    LEFT JOIN \`movie-actors\` AS ma ON m.id = ma.movie_id
+    LEFT JOIN actors AS a ON ma.actor_id = a.id
+    LEFT JOIN \`movie-genre\` AS mg ON m.id = mg.movie_id
+    LEFT JOIN genres AS g ON mg.genre_id = g.id
+WHERE
+    m.title LIKE ?
+AND m.year >= ?
+AND m.rating >= ?
+GROUP BY
+    m.id, m.title, m.description, m.rating, m.year
+HAVING
+    SUM(CASE WHEN a.fullName LIKE ? THEN 1 ELSE 0 END) > 0 
+    AND SUM(CASE WHEN g.id = ? THEN 1 ELSE 0 END) > 0;`
+  const searchTerm = req.body;
+  let movies: MovieInResponseDto[] = [];
+
+  if (searchTerm.genre <=0) {
+    searchTerm.genre = 1
+  }
+  if (searchTerm.title === "") {
+    searchTerm.title = "%"
+  }
+  if (searchTerm.actor === "") {
+    searchTerm.actor = "%"
+  }
+  if (searchTerm.year === "") {
+    searchTerm.year = "1900"
+  }
+  if (searchTerm.rating <= 0) {
+    searchTerm.rating = 1
+  }
+  const q = [
+    `%${searchTerm.title}%`,
+    `${searchTerm.year}`,
+    searchTerm.rating,
+    `%${searchTerm.actor}%`,
+    searchTerm.genre
+  ]
+  await db.raw(query,q)
+    .then((rows: any) => {
+      movies = rows[0].map((movie: any) => new MovieInResponseDto(movie));
+    }).catch((err) => {
+      console.error(err);
+    });
+    return movies
+}
+
 export {
   getAllMovies,
   getMovieById,
   getAllActors,
   getMoviesByActor,
   getAllGenres,
-  getMoviesByGenre
+  getMoviesByGenre,
+  searchMovies
 };
