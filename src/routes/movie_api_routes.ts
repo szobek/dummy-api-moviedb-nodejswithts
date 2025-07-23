@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { getAllMovies } from '../controllers/movie.controller'; 
+import { getAllMovies, getMovieById } from '../controllers/movie.controller'; 
 
 const router = Router();
 
@@ -13,9 +13,7 @@ router.get('', async (req: Request, res: Response) => {
 
 router.get('/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
-  const data = await getAllMovies();
-
-  const movie = data.find((m:any) => m.id === parseInt(id));
+  const movie = await getMovieById(id);
   if (!movie) {
     return res.status(404).json({ message: 'Movie not found' });
   }

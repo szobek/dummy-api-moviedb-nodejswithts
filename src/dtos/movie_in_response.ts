@@ -16,21 +16,9 @@ export class MovieInResponseDto {
     this.year = movie.year;
     this.rating = movie.rating;
     this.director = movie.director;
-    this.genres = movie.genres ? movie.genres.split(',') : [];
-    this.actors = movie.actors ? movie.actors.split(',') : [];
+    this.genres = (movie.genres) ? movie.genres.split(',') : [];
+    this.actors = (movie.actors) ? movie.actors.split(',') : [];
     this.posterUrl = movie.poster_url;
   }
-  toJSON() {
-    return {
-      id: this.id,
-      title: this.title,
-      description: this.description,
-      year: this.year,
-      rating: this.rating,
-      director: this.director,
-      genres: this.genres,
-      actors: this.actors,
-      posterUrl: this.posterUrl
-    };
-  }
+  
 }

@@ -21,7 +21,13 @@ const getAllMovies = async () => {
   }
     return dtos;
 };
-
+const getMovieById = async (id: string) => {
+  const data = await getAllMovies();
+  const movie = data.find((m:any) => m.id === parseInt(id));
+ 
+  return movie;
+}
 export {
     getAllMovies,
+    getMovieById
     };
