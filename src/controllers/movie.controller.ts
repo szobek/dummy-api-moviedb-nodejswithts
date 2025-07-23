@@ -1,4 +1,5 @@
 import db from '../config/knex';
+import { ActorInResponseDto } from '../dtos/actor_in_response';
 import { MovieInResponseDto } from '../dtos/movie_in_response';
 import Movie from '../inerfaces/movie.interface';
 
@@ -27,7 +28,19 @@ const getMovieById = async (id: string) => {
  
   return movie;
 }
+const getAllActors = async () => {
+let actors: ActorInResponseDto[] = [];
+try {
+  await db('actors').select('*').then((rows:any)=>{
+    actors = rows.map((actor: any) => new ActorInResponseDto(actor));
+  });
+} catch (error) {
+  console.error(error);
+}
+return actors
+}
 export {
     getAllMovies,
-    getMovieById
+    getMovieById,
+    getAllActors
     };

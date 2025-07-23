@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express';
-import { getAllMovies, getMovieById } from '../controllers/movie.controller'; 
+import { getAllActors, getAllMovies, getMovieById } from '../controllers/movie.controller'; 
+import { get } from 'http';
 
 const router = Router();
 
@@ -10,6 +11,16 @@ router.get('', async (req: Request, res: Response) => {
  }
   res.json(data);
 });
+
+
+
+router.get('/actors', async (req: Request, res: Response) => {
+  const actors = await getAllActors();
+  if (actors.length === 0) {
+    return res.status(404).json({ message: 'No actors found' });
+  }
+  res.json(actors);
+})
 
 router.get('/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
