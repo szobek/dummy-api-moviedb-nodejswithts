@@ -132,7 +132,7 @@ const getMoviesByGenre = async (genreId: string) => {
 }
 
 interface SearchRequestBody {
-  genre: number;
+  genre: string;
   title: string;
   actor: string;
   year: string;
@@ -162,23 +162,21 @@ GROUP BY
     m.id, m.title, m.description, m.rating, m.year
 HAVING
     SUM(CASE WHEN a.fullName LIKE ? THEN 1 ELSE 0 END) > 0 
-    AND SUM(CASE WHEN g.id = ? THEN 1 ELSE 0 END) > 0;`
+    AND SUM(CASE WHEN g.id LIKE ? THEN 1 ELSE 0 END) > 0;`
   const searchTerm = req.body;
   let movies: MovieInResponseDto[] = [];
 
-  if (searchTerm.genre <=0) {
-    searchTerm.genre = 1
-  }
-  if (searchTerm.title === "") {
+  searchTerm.genre=(searchTerm.genre === ""|| searchTerm.genre === undefined)?`%`:searchTerm.genre;
+  if (searchTerm.title === ""|| searchTerm.title === undefined) {
     searchTerm.title = "%"
   }
-  if (searchTerm.actor === "") {
+  if (searchTerm.actor === ""|| searchTerm.actor === undefined) {
     searchTerm.actor = "%"
   }
-  if (searchTerm.year === "") {
+  if (searchTerm.year === ""|| searchTerm.year === undefined) {
     searchTerm.year = "1900"
   }
-  if (searchTerm.rating <= 0) {
+  if (searchTerm.rating <= 0|| searchTerm.rating === undefined) {
     searchTerm.rating = 1
   }
   const q = [
