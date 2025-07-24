@@ -135,11 +135,14 @@ interface SearchRequestBody {
   genre: string;
   title: string;
   actor: string;
-  year: string;
+  fromyear: string;
+  toyear: string;
   rating: number;
   
 }
 const searchMovies = async (req: Request<{}, {}, SearchRequestBody>, res: Response) => {
+  console.log("Search request body:", req.body);
+  
   const query:string = `
   SELECT
     m.title ,
@@ -156,7 +159,7 @@ FROM
     LEFT JOIN genres AS g ON mg.genre_id = g.id
 WHERE
     m.title LIKE ?
-AND m.year >= ?
+AND m.year BETWEEN ? AND ?
 AND m.rating >= ?
 GROUP BY
     m.id, m.title, m.description, m.rating, m.year
@@ -173,15 +176,14 @@ HAVING
   if (searchTerm.actor === ""|| searchTerm.actor === undefined) {
     searchTerm.actor = "%"
   }
-  if (searchTerm.year === ""|| searchTerm.year === undefined) {
-    searchTerm.year = "1900"
-  }
-  if (searchTerm.rating <= 0|| searchTerm.rating === undefined) {
+  
+  if (searchTerm.rating === undefined||searchTerm.rating <= 0) {
     searchTerm.rating = 1
   }
   const q = [
     `%${searchTerm.title}%`,
-    `${searchTerm.year}`,
+    searchTerm.fromyear || 1900,
+    searchTerm.toyear || new Date().getFullYear(),
     searchTerm.rating,
     `%${searchTerm.actor}%`,
     searchTerm.genre

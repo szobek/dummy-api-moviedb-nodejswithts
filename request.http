@@ -22,10 +22,15 @@ POST http://localhost:3000/api/movies/search
 Content-Type: application/json
 
 {
-    "title":"",
-    "year":"1999",
-    "rating":8.7,
-    "actor":"",
-    "genre":4
-
+    "fromyear":"1999",
+    "toyear":"2002"
 }
+
+# {
+#     "title":"",
+#     "year":"1999",
+#     "rating":8.7,
+#     "actor":"",
+#     "genre":4
+
+# }
