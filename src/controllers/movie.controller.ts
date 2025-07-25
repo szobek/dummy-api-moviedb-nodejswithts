@@ -1,5 +1,6 @@
 import db from "../config/knex";
 import { ActorInResponseDto } from "../dtos/actor_in_response";
+import { GenreInResponseDto } from "../dtos/genre_in_response";
 import { MovieInResponseDto } from "../dtos/movie_in_response";
 import Movie from "../inerfaces/movie.interface";
 import { Request, Response } from 'express';
@@ -86,10 +87,7 @@ const getAllGenres = async () => {
       .select("*")
       .then((rows: any) => {
         genres = rows.map((genre: any) => {
-          return {
-            id: genre.id,
-            name: genre.name,
-          }
+          return new GenreInResponseDto(genre);
         });
       });
   } catch (error) {
