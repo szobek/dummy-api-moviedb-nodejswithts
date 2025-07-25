@@ -45,9 +45,12 @@ const getMoviesByActor = async (actorId: string) => {
   let movies: MovieInResponseDto[] = [];
   const query = `SELECT
     m.title ,
+    m.id,
     m.description,
     m.rating ,
     m.year ,
+    m.poster_url,
+    m.director,
     GROUP_CONCAT(DISTINCT a.fullName SEPARATOR ', ') AS actors,
     GROUP_CONCAT(DISTINCT g.name SEPARATOR ', ') AS genres
 FROM
