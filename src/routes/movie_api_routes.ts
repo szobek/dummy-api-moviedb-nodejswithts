@@ -25,8 +25,6 @@ router.get('/actors/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
   
  await getMoviesByActor(id).then((movies:any)=>{
-  console.log('movies', movies);
-  
     res.json(movies);
   });
 })
