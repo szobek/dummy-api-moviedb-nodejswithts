@@ -8,11 +8,11 @@ export default class SearcKeysInRequestDto {
 
   constructor(params: any) {
     this.title = (params.title || "%").trim();
-    this.from_year = params.fromyear
+    this.from_year = params.from_year
       ? parseInt(params.from_year)
       : 1950;
     this.to_year =
-      params.toyear? parseInt(params.to_year) :
+      params.to_year? parseInt(params.to_year) :
       parseInt(new Date().getFullYear().toString());
     this.rating = params.rating ? parseInt(params.rating) : 1;
     this.actor = (params.actor || "%").trim()
