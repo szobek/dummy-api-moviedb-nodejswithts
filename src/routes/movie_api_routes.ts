@@ -46,8 +46,8 @@ router.get('/genres/:id', async (req: Request, res: Response) => {
 })
 
 
-router.post('/search', async (req, res) => {
- const movies=await searchMovies(req,res)
+router.get('/search', async (req, res) => {
+ const movies=await searchMovies(req)
  res.json(movies);
 });
 

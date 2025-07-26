@@ -18,19 +18,7 @@ GET http://localhost:3000/api/movies/genres
 GET http://localhost:3000/api/movies/genres/2
 
 ### get movie by criteries
-POST http://localhost:3000/api/movies/search
-Content-Type: application/json
-
-{
-    "fromyear":"1999",
-    "toyear":"2002"
-}
-
-# {
-#     "title":"",
-#     "year":"1999",
-#     "rating":8.7,
-#     "actor":"",
-#     "genre":4
-
-# }
+GET http://localhost:3000/api/movies/search
+# GET http://localhost:3000/api/movies/search?fromyear=1987&toyear=2025
+# GET http://localhost:3000/api/movies/search?title=e&fromyear=1980&toyear=2025&rating=7&actor=paci&genre=4
+# if empty genre it is 4

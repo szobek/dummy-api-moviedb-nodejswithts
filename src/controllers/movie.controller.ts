@@ -2,8 +2,9 @@ import db from "../config/knex";
 import { ActorInResponseDto } from "../dtos/actor_in_response";
 import { GenreInResponseDto } from "../dtos/genre_in_response";
 import { MovieInResponseDto } from "../dtos/movie_in_response";
+import  SearcKeysInRequestDto  from "../dtos/search_keys_in_request";
 import Movie from "../inerfaces/movie.interface";
-import { Request, Response } from 'express';
+import { Request } from 'express';
 
 const getAllMovies = async () => {
   let dtos: MovieInResponseDto[] = [];
@@ -132,17 +133,8 @@ const getMoviesByGenre = async (genreId: string) => {
   return movies;
 }
 
-interface SearchRequestBody {
-  genre: string;
-  title: string;
-  actor: string;
-  fromyear: string;
-  toyear: string;
-  rating: number;
-  
-}
-const searchMovies = async (req: Request<{}, {}, SearchRequestBody>, res: Response) => {
-  console.log("Search request body:", req.body);
+const searchMovies = async (req: Request) => {
+  const searchTerm=new SearcKeysInRequestDto(req.query);
   
   const query:string = `
   SELECT
@@ -159,34 +151,24 @@ FROM
     LEFT JOIN \`movie-genre\` AS mg ON m.id = mg.movie_id
     LEFT JOIN genres AS g ON mg.genre_id = g.id
 WHERE
-    m.title LIKE ?
-AND m.year BETWEEN ? AND ?
-AND m.rating >= ?
+  m.title LIKE ?
+AND 
+  m.year BETWEEN ? AND ?
+AND 
+  m.rating >= ?
 GROUP BY
     m.id, m.title, m.description, m.rating, m.year
 HAVING
     SUM(CASE WHEN a.fullName LIKE ? THEN 1 ELSE 0 END) > 0 
     AND SUM(CASE WHEN g.id LIKE ? THEN 1 ELSE 0 END) > 0;`
-  const searchTerm = req.body;
-  let movies: MovieInResponseDto[] = [];
-
-  searchTerm.genre=(searchTerm.genre === ""|| searchTerm.genre === undefined)?`%`:searchTerm.genre;
-  if (searchTerm.title === ""|| searchTerm.title === undefined) {
-    searchTerm.title = "%"
-  }
-  if (searchTerm.actor === ""|| searchTerm.actor === undefined) {
-    searchTerm.actor = "%"
-  }
   
-  if (searchTerm.rating === undefined||searchTerm.rating <= 0) {
-    searchTerm.rating = 1
-  }
+  let movies: MovieInResponseDto[] = [];
   const q = [
-    `%${searchTerm.title}%`,
-    searchTerm.fromyear || 1900,
-    searchTerm.toyear || new Date().getFullYear(),
+    `${searchTerm.title}`,
+    searchTerm.fromyear,
+    searchTerm.toyear,
     searchTerm.rating,
-    `%${searchTerm.actor}%`,
+    `${searchTerm.actor}`,
     searchTerm.genre
   ]
   await db.raw(query,q)
