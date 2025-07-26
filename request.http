@@ -21,4 +21,4 @@ GET http://localhost:3000/api/movies/genres/2
 GET http://localhost:3000/api/movies/search
 # GET http://localhost:3000/api/movies/search?fromyear=1987&toyear=2025
 # GET http://localhost:3000/api/movies/search?title=e&fromyear=1980&toyear=2025&rating=7&actor=paci&genre=4
-# if empty genre it is 4
+# if empty genre it is 4, ffromyear is 1950 and toyear is new Date().getFullYear(),rating is 1

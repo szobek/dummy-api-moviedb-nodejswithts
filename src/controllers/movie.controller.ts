@@ -163,15 +163,8 @@ HAVING
     AND SUM(CASE WHEN g.id LIKE ? THEN 1 ELSE 0 END) > 0;`
   
   let movies: MovieInResponseDto[] = [];
-  const q = [
-    `${searchTerm.title}`,
-    searchTerm.fromyear,
-    searchTerm.toyear,
-    searchTerm.rating,
-    `${searchTerm.actor}`,
-    searchTerm.genre
-  ]
-  await db.raw(query,q)
+  const paramsOfQuery = Object.values(searchTerm);
+  await db.raw(query,paramsOfQuery)
     .then((rows: any) => {
       movies = rows[0].map((movie: any) => new MovieInResponseDto(movie));
     }).catch((err) => {
