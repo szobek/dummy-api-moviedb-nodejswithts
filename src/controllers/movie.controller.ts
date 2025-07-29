@@ -101,10 +101,13 @@ const getMoviesByGenre = async (genreId: string) => {
   let movies: MovieInResponseDto[] = [];
   const query = `
   SELECT
-  m.title ,
+    m.title ,
     m.description,
     m.rating ,
     m.year ,
+    m.id,
+    m.poster_url,
+    m.director,
     GROUP_CONCAT(DISTINCT a.fullName SEPARATOR ', ') AS actors,
     GROUP_CONCAT(DISTINCT g.name SEPARATOR ', ') AS genres
     FROM
