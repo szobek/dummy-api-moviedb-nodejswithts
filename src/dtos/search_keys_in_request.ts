@@ -16,6 +16,6 @@ export default class SearcKeysInRequestDto {
       parseInt(new Date().getFullYear().toString());
     this.rating = params.rating ? parseInt(params.rating) : 1;
     this.actor = (params.actor || "%").trim()
-    this.genre = params.genre ? parseInt(params.genre) : "%";
+    this.genre = params.genre&&params.genre!=='%' ? parseInt(params.genre) : "%";
   }
 }
