@@ -178,6 +178,17 @@ HAVING
     });
     return movies
 }
+const deleteMovieById = async (id: string) => {
+  let deletedRow;
+  try {
+    await db("movies").where("id", id).del().then(res=>{
+      deletedRow=res;
+    });
+  } catch (error) {
+    console.log(error);
+  }
+  return deletedRow;
+}
 
 export {
   getAllMovies,
@@ -186,5 +197,6 @@ export {
   getMoviesByActor,
   getAllGenres,
   getMoviesByGenre,
-  searchMovies
+  searchMovies,
+  deleteMovieById
 };
