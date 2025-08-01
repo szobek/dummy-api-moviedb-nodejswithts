@@ -1,6 +1,6 @@
 import express, { Application } from 'express';
 import dotenv from 'dotenv';
-import movieApiRoutes from './routes/movie_api_routes';
+import movieApiRoutes from './routes/movie_api.routes';
 import seedRoutes from './routes/seed.routes';
 import cors from 'cors';
 
