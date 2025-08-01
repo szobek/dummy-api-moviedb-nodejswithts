@@ -15,9 +15,12 @@ const knexConfig = {
     database: process.env.DB_DATABASE,
   },
   migrations: {
-      directory: path.join(__dirname, 'src/db/migrations'),
+      directory: path.join(__dirname, '../db/migrations'),
       extension: 'ts',
-  }
+  },
+  seeds: {
+    directory: path.join(__dirname, '../db/seeds'),
+  },
 };
 
 const db = knex(knexConfig);

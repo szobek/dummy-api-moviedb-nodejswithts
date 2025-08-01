@@ -25,3 +25,6 @@ GET http://localhost:3000/api/movies/search?from_year=2005&to_year=2025
 
 ### delete movie by id
 DELETE http://localhost:3000/api/movies/4
+
+### seed db from google sheet
+GET http://localhost:3000/api/seed
