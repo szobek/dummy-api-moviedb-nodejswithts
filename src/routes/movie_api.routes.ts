@@ -9,6 +9,7 @@ import {
   getMoviesByGenre,
   searchMovies,
 } from "../controllers/movie.controller";
+import { authenticateToken } from "../middlewares/auth.middleware";
 
 const router = Router();
 
@@ -66,7 +67,7 @@ router.get("/:id", async (req: Request, res: Response) => {
   res.json(movie);
 });
 
-router.delete("/:id", async (req: Request, res: Response) => {
+router.delete("/:id", authenticateToken, async (req: Request, res: Response) => {
   const { id } = req.params;
   const deletedRow = await deleteMovieById(id);
   res.json({"message": deletedRow === 1 ? "Movie deleted successfully" : "Movie not found"});
