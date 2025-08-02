@@ -1,0 +1,29 @@
+### get all movies
+GET http://localhost:3000/api/movies
+
+### get movie by id
+GET http://localhost:3000/api/movies/4
+
+### get all actors
+GET http://localhost:3000/api/movies/actors
+
+### get movies by actor
+GET http://localhost:3000/api/movies/actors/4
+
+### get all genre
+GET http://localhost:3000/api/movies/genres
+
+
+### get all movies by genre
+GET http://localhost:3000/api/movies/genres/2
+
+### get movie by criteries
+# GET http://localhost:3000/api/movies/search
+GET http://localhost:3000/api/movies/search?from_year=2005&to_year=2025
+# GET http://localhost:3000/api/movies/search?title=e&from_year=1980&to_year=2025&rating=7&actor=paci&genre=4
+# if empty genre it is "%", from_year is 1950 and to_year is new Date().getFullYear(),rating is 1
+
+### delete movie by id
+DELETE http://localhost:3000/api/movies/4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc1NDE1MjcyMiwiZXhwIjoxNzU0MTU2MzIyfQ.YHpFV9oKTbNdxdcgdsngE8iwDuccIf2dV5lcU7zBkoQ
+
