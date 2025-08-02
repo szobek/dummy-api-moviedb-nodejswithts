@@ -28,3 +28,31 @@ DELETE http://localhost:3000/api/movies/4
 
 ### seed db from google sheet
 GET http://localhost:3000/api/seed
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc1NDE1MjcyMiwiZXhwIjoxNzU0MTU2MzIyfQ.YHpFV9oKTbNdxdcgdsngE8iwDuccIf2dV5lcU7zBkoQ
+### register user
+POST http://localhost:3000/api/auth/register
+Content-Type: application/json
+
+{
+    "email": "test2@test.com",
+    "password": "test"
+}
+
+### login user
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "test2@test.com",
+    "password": "test"
+}
+
+### test jwt
+GET http://localhost:3000/api/auth/profile
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc1NDE1MjcyMiwiZXhwIjoxNzU0MTU2MzIyfQ.YHpFV9oKTbNdxdcgdsngE8iwDuccIf2dV5lcU7zBkoQ
+#a token minden login után más
+
+### update token
+PUT http://localhost:3000/api/auth/refresh-token
+refresh_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc1NDEyMzI2MiwiZXhwIjoxNzU0NzI4MDYyfQ.u-f3jvIsp6LOe_xJksVrWhMt_eretKFuZEQIR4uv-mw
+
