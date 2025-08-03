@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import db from "../config/knex";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-
+import loggedIn from "../interfaces/LoggedIn.interface";
 dotenv.config();
 
 const register = async (body: any) => {
@@ -27,13 +27,6 @@ const register = async (body: any) => {
 
   return registered;
 };
-
-interface loggedIn {
-  token: string | null;
-  success: boolean;
-  message: string;
-  refreshToken: string | null;
-}
 
 const login = async (body: any) => {
   const loggedIn: loggedIn = {
