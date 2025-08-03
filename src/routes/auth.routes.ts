@@ -57,7 +57,7 @@ router.patch(
     res.json("User promoted successfully");
    }
    else{
-    res.status(400).json("User not found");
+    res.status(400).json("User not found to promote");
    }
   }
 );
@@ -71,7 +71,7 @@ router.patch(
     res.json("User approved successfully");
    }
    else{
-    res.status(400).json("User not found");
+    res.status(400).json("User not found to approve");
    }
   }
 );

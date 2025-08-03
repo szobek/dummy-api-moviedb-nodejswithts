@@ -129,6 +129,7 @@ const approveUser = async (id: number) => {
     await db('users')
     .where({ id })
     .update({ approved: true }) 
+    success=true;
   }catch(err){
     console.log(err);
   }
