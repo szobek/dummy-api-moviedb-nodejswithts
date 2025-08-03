@@ -28,3 +28,5 @@ the seeder work with a sheet data
 
 in the root has a request.http ( i use REST Client: https://marketplace.visualstudio.com/items?itemName=humao.rest-client) file for testing and read the endpoints
 the requests file is in the http_request dir
+
+if register a new user,the admin can approve it and he can promote to admin
