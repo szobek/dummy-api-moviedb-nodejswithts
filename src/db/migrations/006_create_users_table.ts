@@ -7,6 +7,8 @@ export async function up(knex: Knex): Promise<void> {
         table.string('email').notNullable().unique();
         table.string('password').notNullable();
         table.string('refresh_token').defaultTo(null);
+        table.enum('role', ['admin', 'user']).defaultTo('user');
+        table.boolean('approved').defaultTo(false);
         table.timestamps(true, true); // created_at and updated_at timestamps
     })
 }

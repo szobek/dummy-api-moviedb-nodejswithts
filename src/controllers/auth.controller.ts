@@ -2,7 +2,6 @@ import bcrypt from "bcryptjs";
 import db from "../config/knex";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import { log } from "console";
 
 dotenv.config();
 
@@ -56,8 +55,8 @@ const login = async (body: any) => {
     return loggedIn;
   }
 
-  const token = generateAccessToken(user.id);
-  const refreshToken = generateRefreshToken(user.id);
+  const token = generateAccessToken(user);
+  const refreshToken = generateRefreshToken(user);
   await db("users")
     .where({ id: user.id })
     .update({ refresh_token: refreshToken });
@@ -70,31 +69,72 @@ const login = async (body: any) => {
 };
 
 const updateToken = async (refreshToken: string = "") => {
-  let storedToken:any = "";
+  let storedToken: any = "";
   if (refreshToken === "") return "Token not found";
-  storedToken= await db("users")
-  .select("refresh_token")
-  .where({ "refresh_token": refreshToken })
-  .first()
-  
+  storedToken = await db("users")
+    .select("refresh_token")
+    .where({ refresh_token: refreshToken })
+    .first();
+
   if (!storedToken) {
     return null;
   }
-  const payload = jwt.verify(storedToken.refresh_token, process.env.JWT_REFRESH_TOKEN_SECRET as string);
+  const payload = jwt.verify(
+    storedToken.refresh_token,
+    process.env.JWT_REFRESH_TOKEN_SECRET as string
+  );
   const newAccessToken = generateAccessToken((payload as any).userId);
   return newAccessToken;
 };
 
-const generateAccessToken = (userId: number): string => {
-  return jwt.sign({ userId }, process.env.JWT_ACCESS_TOKEN_SECRET as string, {
+const generateAccessToken = (user:any): string => {
+  return jwt.sign({ "id":user.id,"role":user.role }, process.env.JWT_ACCESS_TOKEN_SECRET as string, {
     expiresIn: "1h",
   });
 };
 
-const generateRefreshToken = (userId: number): string => {
-  return jwt.sign({ userId }, process.env.JWT_REFRESH_TOKEN_SECRET as string, {
+const generateRefreshToken = (user: any): string => {
+  return jwt.sign({ "id":user.id,"role":user.role }, process.env.JWT_REFRESH_TOKEN_SECRET as string, {
     expiresIn: "7d",
   });
 };
 
-export { updateToken, login, register };
+const promotionUser = async (id: number) => {
+  let success:boolean=false;
+  const user = await db('users')
+  .where({ id })
+  .first();
+  if (!user) {
+    return success;
+  }
+  try{
+    
+    await db('users')
+    .where({ id })
+    .update({ role: 'admin' })
+    success=true;
+  }catch(err){
+    console.log(err);
+  }
+  return success;
+}
+
+const approveUser = async (id: number) => {
+  let success:boolean=false;
+  const user = await db('users')
+  .where({ id })
+  .first();
+  if (!user) {
+    return success;
+  }
+  try{
+    
+    await db('users')
+    .where({ id })
+    .update({ approved: true }) 
+  }catch(err){
+    console.log(err);
+  }
+  return success;
+}
+export { updateToken, login, register, promotionUser,approveUser };

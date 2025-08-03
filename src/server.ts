@@ -5,6 +5,7 @@ import seedRoutes from './routes/seed.routes';
 import authRoutes from './routes/auth.routes';
 import cors from 'cors';
 import { authenticateToken } from './middlewares/auth.middleware';
+import UserInterface from './interfaces/User.interface';
 
 dotenv.config();
 
@@ -17,7 +18,13 @@ app.use('/api/movies', movieApiRoutes);
 app.use('/api/seed',authenticateToken, seedRoutes);
 app.use('/api/auth', authRoutes);
 
-
+declare global {
+  namespace Express {
+    interface Request {
+      user?: UserInterface;
+    }
+  }
+}
 
 
 app.listen(port, () => {

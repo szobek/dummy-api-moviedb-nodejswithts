@@ -4,7 +4,7 @@ POST http://localhost:3000/api/auth/register
 Content-Type: application/json
 
 {
-    "email": "test2@test.com",
+    "email": "test223@test.com",
     "password": "test"
 }
 
@@ -13,16 +13,34 @@ POST http://localhost:3000/api/auth/login
 Content-Type: application/json
 
 {
-    "email": "test2@test.com",
-    "password": "test"
+    "email": "test@test.com",
+    "password": "password"
 }
 
 ### test jwt
 GET http://localhost:3000/api/auth/profile
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc1NDE1MjcyMiwiZXhwIjoxNzU0MTU2MzIyfQ.YHpFV9oKTbNdxdcgdsngE8iwDuccIf2dV5lcU7zBkoQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Miwicm9sZSI6InVzZXIiLCJpYXQiOjE3NTQxNTgwMTAsImV4cCI6MTc1NDE2MTYxMH0.leE8wCz1ThquEg4U526hlXCtL4r9rIS8CYLH83toFBc
 #a token minden login után más
 
 ### update token
 PUT http://localhost:3000/api/auth/refresh-token
 refresh_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc1NDEyMzI2MiwiZXhwIjoxNzU0NzI4MDYyfQ.u-f3jvIsp6LOe_xJksVrWhMt_eretKFuZEQIR4uv-mw
 
+### approve user
+PATCH http://localhost:3000/api/auth/approval
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6InVzZXIiLCJpYXQiOjE3NTQyMTE4OTgsImV4cCI6MTc1NDIxNTQ5OH0.BBgEZMDMk7YFg2ZffNZkTvNg7IRYIkBQ2iTfVhJ80dY
+Content-Type: application/json
+
+{
+    "id": 1
+}
+
+
+### promote user
+PATCH http://localhost:3000/api/auth/promotion
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mywicm9sZSI6InVzZXIiLCJpYXQiOjE3NTQyMDk1OTYsImV4cCI6MTc1NDIxMzE5Nn0.tmAo7HDEZQ2bnF63kc6ZcDq7nW6PiWbhELdvlzz69kU
+Content-Type: application/json
+
+{
+    "id": 10
+}

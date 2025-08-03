@@ -3,7 +3,7 @@ import { ActorInResponseDto } from "../dtos/actor_in_response";
 import { GenreInResponseDto } from "../dtos/genre_in_response";
 import { MovieInResponseDto } from "../dtos/movie_in_response";
 import  SearcKeysInRequestDto  from "../dtos/search_keys_in_request";
-import Movie from "../inerfaces/movie.interface";
+import Movie from "../interfaces/movie.interface";
 import { Request } from 'express';
 
 const getAllMovies = async () => {
