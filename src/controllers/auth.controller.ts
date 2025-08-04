@@ -135,4 +135,8 @@ const approveUser = async (id: number) => {
   }
   return success;
 }
-export { updateToken, login, register, promotionUser,approveUser };
+
+const listUsers = async () => {
+  return await db('users').select('*');
+}
+export { updateToken, login, register, promotionUser,approveUser,listUsers };

@@ -8,7 +8,19 @@ Content-Type: application/json
     "password": "test"
 }
 
+### list users
+GET http://localhost:3000/api/auth/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzU0MzEwNTU1LCJleHAiOjE3NTQzMTQxNTV9.FnEjdSrj8EckhfP1dQ_J7BpOB09Zp58t4_pwm50yRsM
+
 ### login user
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "test223@test.com",
+    "password": "test"
+}
+### login admin
 POST http://localhost:3000/api/auth/login
 Content-Type: application/json
 
@@ -19,7 +31,7 @@ Content-Type: application/json
 
 ### test jwt
 GET http://localhost:3000/api/auth/profile
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Miwicm9sZSI6InVzZXIiLCJpYXQiOjE3NTQxNTgwMTAsImV4cCI6MTc1NDE2MTYxMH0.leE8wCz1ThquEg4U526hlXCtL4r9rIS8CYLH83toFBc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Miwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzU0MzA5NjIyLCJleHAiOjE3NTQzMTMyMjJ9.LxWMOnDwOSrAtciEP79tldaKHl8MVF8bJ3yjxcEkeq0
 #a token minden login után más
 
 ### update token
@@ -28,7 +40,7 @@ refresh_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc1
 
 ### approve user
 PATCH http://localhost:3000/api/auth/approval
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzU0MjEyOTI5LCJleHAiOjE3NTQyMTY1Mjl9.TlKAir6sLB2AoEIeA6lfuPbqctYoN3f7wSRih2hSnks
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzU0MzEwMDkwLCJleHAiOjE3NTQzMTM2OTB9.2L9nf6TSdajohhBxgmVDCAkSOMbdTZzxkDnwLQFbvi4
 Content-Type: application/json
 
 {

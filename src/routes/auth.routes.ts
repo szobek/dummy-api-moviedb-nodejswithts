@@ -5,6 +5,7 @@ import {
   register,
   updateToken,
   approveUser,
+  listUsers,
 } from "../controllers/auth.controller";
 import { authenticateToken } from "../middlewares/auth.middleware";
 import { authorizeRoles } from "../middlewares/roles.middleware";
@@ -75,5 +76,11 @@ router.patch(
    }
   }
 );
+
+router.get('/users', [authenticateToken, authorizeRoles("admin")], async (req: Request, res: Response) => {
+  const users = await listUsers();
+  res.json(users);
+
+})
 
 export default router;
