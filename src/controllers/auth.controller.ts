@@ -37,6 +37,11 @@ const login = async (body: any) => {
   };
   const { email, password } = body;
   const user = await db("users").where({ email }).first();
+
+  if(!user){
+    loggedIn.message = "User does not exist";
+    return loggedIn;
+  }
   if(!user.approved){
     loggedIn.message = "User is not approved";
     return loggedIn;
