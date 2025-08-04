@@ -4,20 +4,20 @@ POST http://localhost:3000/api/auth/register
 Content-Type: application/json
 
 {
-    "email": "test223@test.com",
+    "email": "test2235@test.com",
     "password": "test"
 }
 
 ### list users
 GET http://localhost:3000/api/auth/users
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Niwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzU0MzEwNzMxLCJleHAiOjE3NTQzMTQzMzF9.bIm2o1-zIu6wBtREIY2i_kGqt-INWBi397oEpMhhqbI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzU0MzMxODU5LCJleHAiOjE3NTQzMzU0NTl9.ZKuccimKWviy7m5GUVO1yTyo64ynCsFNufC1thQWQ-U
 
 ### login user
 POST http://localhost:3000/api/auth/login
 Content-Type: application/json
 
 {
-    "email": "test223@test.com",
+    "email": "test2235@test.com",
     "password": "test"
 }
 ### login admin
@@ -36,23 +36,23 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6I
 
 ### update token
 PUT http://localhost:3000/api/auth/refresh-token
-refresh_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzU0MzMxMzkyLCJleHAiOjE3NTQ5MzYxOTJ9.qRI1QFhUOTmhSyAYrocSCmZoirBAujgWiGv6vENHX70
+refresh_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mywicm9sZSI6InVzZXIiLCJpYXQiOjE3NTQzMzE5NTAsImV4cCI6MTc1NDkzNjc1MH0.OnMuRfsXI_h9A-UQIBJ-dQl5zfV8gWptcNpTG3_L7iE
 
 ### approve user
 PATCH http://localhost:3000/api/auth/approval
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzU0MzEwMDkwLCJleHAiOjE3NTQzMTM2OTB9.2L9nf6TSdajohhBxgmVDCAkSOMbdTZzxkDnwLQFbvi4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzU0MzMxODU5LCJleHAiOjE3NTQzMzU0NTl9.ZKuccimKWviy7m5GUVO1yTyo64ynCsFNufC1thQWQ-U
 Content-Type: application/json
 
 {
-    "id": 2
+    "id": 3
 }
 
 
 ### promote user
 PATCH http://localhost:3000/api/auth/promotion
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzU0MjEyOTI5LCJleHAiOjE3NTQyMTY1Mjl9.TlKAir6sLB2AoEIeA6lfuPbqctYoN3f7wSRih2hSnks
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzU0MzMxODU5LCJleHAiOjE3NTQzMzU0NTl9.ZKuccimKWviy7m5GUVO1yTyo64ynCsFNufC1thQWQ-U
 Content-Type: application/json
 
 {
-    "id": 2
+    "id": 3
 }
