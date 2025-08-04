@@ -1,3 +1,3 @@
 ### seed db from google sheet
 GET http://localhost:3000/api/seed
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc1NDE1MjcyMiwiZXhwIjoxNzU0MTU2MzIyfQ.YHpFV9oKTbNdxdcgdsngE8iwDuccIf2dV5lcU7zBkoQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzU0MzMxODU5LCJleHAiOjE3NTQzMzU0NTl9.ZKuccimKWviy7m5GUVO1yTyo64ynCsFNufC1thQWQ-U
