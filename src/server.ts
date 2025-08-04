@@ -26,6 +26,10 @@ declare global {
   }
 }
 
+app.get('/', (req, res) => {
+    res.send('A Filmes alkalmazás fut!');
+});
+
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
