@@ -80,7 +80,7 @@ const updateToken = async (refreshToken: string = "") => {
     storedToken.refresh_token,
     process.env.JWT_REFRESH_TOKEN_SECRET as string
   );
-  const newAccessToken = generateAccessToken((payload as any).userId);
+  const newAccessToken = generateAccessToken((payload as any).id);
   return newAccessToken;
 };
 

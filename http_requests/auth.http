@@ -10,7 +10,7 @@ Content-Type: application/json
 
 ### list users
 GET http://localhost:3000/api/auth/users
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzU0MzEwNTU1LCJleHAiOjE3NTQzMTQxNTV9.FnEjdSrj8EckhfP1dQ_J7BpOB09Zp58t4_pwm50yRsM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Niwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzU0MzEwNzMxLCJleHAiOjE3NTQzMTQzMzF9.bIm2o1-zIu6wBtREIY2i_kGqt-INWBi397oEpMhhqbI
 
 ### login user
 POST http://localhost:3000/api/auth/login
@@ -31,12 +31,12 @@ Content-Type: application/json
 
 ### test jwt
 GET http://localhost:3000/api/auth/profile
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Miwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzU0MzA5NjIyLCJleHAiOjE3NTQzMTMyMjJ9.LxWMOnDwOSrAtciEP79tldaKHl8MVF8bJ3yjxcEkeq0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzU0MzMxMjUzLCJleHAiOjE3NTQzMzQ4NTN9.m-oRIt-6tx0RZPvEsxTyBE3jrX4rqKdiMjzZKM2VgKI
 #a token minden login után más
 
 ### update token
 PUT http://localhost:3000/api/auth/refresh-token
-refresh_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc1NDEyMzI2MiwiZXhwIjoxNzU0NzI4MDYyfQ.u-f3jvIsp6LOe_xJksVrWhMt_eretKFuZEQIR4uv-mw
+refresh_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzU0MzMxMzkyLCJleHAiOjE3NTQ5MzYxOTJ9.qRI1QFhUOTmhSyAYrocSCmZoirBAujgWiGv6vENHX70
 
 ### approve user
 PATCH http://localhost:3000/api/auth/approval

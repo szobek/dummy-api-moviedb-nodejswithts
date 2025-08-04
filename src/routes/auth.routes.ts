@@ -43,7 +43,7 @@ router.put("/refresh-token", async (req: Request, res: Response) => {
 
 router.get(
   "/profile",
-  [authenticateToken, authorizeRoles("user")],
+  [authenticateToken, authorizeRoles("user","admin")],
   (req: Request, res: Response) => {
     res.json({ user: req.user });
   }
