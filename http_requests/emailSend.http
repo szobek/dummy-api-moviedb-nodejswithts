@@ -4,5 +4,5 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwicm9sZSI6I
 
 {
   "to": "kunszt.norbert2@gmail.com",
-  "subject": "Teszt üzenet",
+  "subject": "Teszt üzenet"
 }

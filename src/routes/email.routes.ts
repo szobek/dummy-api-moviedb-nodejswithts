@@ -7,8 +7,8 @@ router.post('/send-email', async (req, res) => {
   const { to, subject } = req.body;
   try {
     const html = `emailTemplate.html`;
-    sendHtmlEmail(to, subject, html);
-    res.json({ message: 'Email sent' });
+    const info = await sendHtmlEmail(to, subject, html);
+    res.json({ message: 'Email sent',info });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Failed to send email' });

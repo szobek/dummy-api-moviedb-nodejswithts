@@ -23,7 +23,5 @@ export const sendHtmlEmail = async (to: string, subject: string, templateName: s
     subject,
     html,
   });
-
-  console.log('Email sent:', info.messageId);
   return info;
 };
