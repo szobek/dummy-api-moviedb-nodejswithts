@@ -1,33 +1,33 @@
-# version: '3.8'
+version: '3.8'
 
 services:
-  # Az Express.js alkalmazás szolgáltatása
   app:
-    build: .  # A Dockerfile-t a jelenlegi könyvtárban keresi és buildeli
+    build: .
     container_name: movie_app
     restart: unless-stopped
     ports:
-      - "3000:3000" # A gép 3000-es portját a konténer 3000-es portjára irányítja
+      - "3000:3000"
     environment:
-      - DB_HOST=db
-      - DB_USER=movie_user
-      - DB_PASSWORD=your_strong_password # Használj erős jelszót!
-      - DB_NAME=movie_db
+      DB_HOST: db
+      DB_USER: movie_user
+      DB_PASSWORD: your_strong_password
+      DB_NAME: movie_db
     depends_on:
-      - db # Megvárja, amíg a 'db' szolgáltatás elindul
+      - db
 
-  # A MySQL adatbázis szolgáltatása
   db:
-    image: mysql:8.0 # Hivatalos MySQL image használata
+    image: mysql:8.0
     container_name: movie_database
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: your_root_password # Használj erős jelszót!
-      MYSQL_DATABASE: movie_db # LÉNYEGES: Ez hozza létre a 'movie_db' adatbázist induláskor
+      MYSQL_ROOT_PASSWORD: your_root_password
+      MYSQL_DATABASE: movie_db
       MYSQL_USER: movie_user
-      MYSQL_PASSWORD: your_strong_password # Ugyanaz a jelszó, mint az appnál
+      MYSQL_PASSWORD: your_strong_password
     volumes:
-      - db_data:/var/lib/mysql # Az adatbázis adatai perzisztensek maradnak a konténer újraindítása után is
+      - db_data:/var/lib/mysql
+    ports:
+      - "3307:3306"
 
 volumes:
-  db_data: # A volume deklarálása
+  db_data:
