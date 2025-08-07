@@ -16,8 +16,9 @@ export async function seed(knex: Knex): Promise<void> {
 
 const convert = (data:any) => {
   return data.map((row:any,index:number) => {
+    const mid=index+1;
     return {
-      id:index+1,
+      id:mid,
       title: row[0],
       description: row[1],
       year: parseInt(row[2]),
