@@ -11,7 +11,14 @@ const register = async (body: any) => {
   const users = await db("users").select("*");
   const hashed = await bcrypt.hash(password, 10);
   const existing = await users.find((u) => u.email === email);
-
+  if (email === "" || !email) {
+    registered.message = "The email is empty";
+    return;
+  }
+  if (password === "" || !password) {
+    registered.message = "The password is empty";
+    return;
+  }
   if (existing) {
     registered.message = "User already exists";
     return registered;
@@ -38,11 +45,11 @@ const login = async (body: any) => {
   const { email, password } = body;
   const user = await db("users").where({ email }).first();
 
-  if(!user){
+  if (!user) {
     loggedIn.message = "User does not exist";
     return loggedIn;
   }
-  if(!user.approved){
+  if (!user.approved) {
     loggedIn.message = "User is not approved";
     return loggedIn;
   }
@@ -89,59 +96,57 @@ const updateToken = async (refreshToken: string = "") => {
   return newAccessToken;
 };
 
-const generateAccessToken = (user:any): string => {
-  return jwt.sign({ "id":user.id,"role":user.role }, process.env.JWT_ACCESS_TOKEN_SECRET as string, {
-    expiresIn: "1h",
-  });
+const generateAccessToken = (user: any): string => {
+  return jwt.sign(
+    { id: user.id, role: user.role },
+    process.env.JWT_ACCESS_TOKEN_SECRET as string,
+    {
+      expiresIn: "1h",
+    }
+  );
 };
 
 const generateRefreshToken = (user: any): string => {
-  return jwt.sign({ "id":user.id,"role":user.role }, process.env.JWT_REFRESH_TOKEN_SECRET as string, {
-    expiresIn: "7d",
-  });
+  return jwt.sign(
+    { id: user.id, role: user.role },
+    process.env.JWT_REFRESH_TOKEN_SECRET as string,
+    {
+      expiresIn: "7d",
+    }
+  );
 };
 
 const promotionUser = async (id: number) => {
-  let success:boolean=false;
-  const user = await db('users')
-  .where({ id })
-  .first();
+  let success: boolean = false;
+  const user = await db("users").where({ id }).first();
   if (!user) {
     return success;
   }
-  try{
-    
-    await db('users')
-    .where({ id })
-    .update({ role: 'admin' })
-    success=true;
-  }catch(err){
+  try {
+    await db("users").where({ id }).update({ role: "admin" });
+    success = true;
+  } catch (err) {
     console.log(err);
   }
   return success;
-}
+};
 
 const approveUser = async (id: number) => {
-  let success:boolean=false;
-  const user = await db('users')
-  .where({ id })
-  .first();
+  let success: boolean = false;
+  const user = await db("users").where({ id }).first();
   if (!user) {
     return success;
   }
-  try{
-    
-    await db('users')
-    .where({ id })
-    .update({ approved: true }) 
-    success=true;
-  }catch(err){
+  try {
+    await db("users").where({ id }).update({ approved: true });
+    success = true;
+  } catch (err) {
     console.log(err);
   }
   return success;
-}
+};
 
 const listUsers = async () => {
-  return await db('users').select('*');
-}
-export { updateToken, login, register, promotionUser,approveUser,listUsers };
+  return await db("users").select("*");
+};
+export { updateToken, login, register, promotionUser, approveUser, listUsers };

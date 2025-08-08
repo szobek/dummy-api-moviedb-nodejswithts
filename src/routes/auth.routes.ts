@@ -16,7 +16,7 @@ router.post("/register", async (req: Request, res: Response) => {
   const registered = await register(req.body);
 
   if (registered?.success) {
-    res.json("User registered successfully");
+    res.json(registered);
   } else {
     res.status(400).json(registered);
   }
