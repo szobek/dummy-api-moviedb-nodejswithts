@@ -37,10 +37,17 @@ const register = async (body: any) => {
 
 const login = async (body: any) => {
   const loggedIn: loggedIn = {
-    refreshToken: null,
-    token: null,
     success: false,
     message: "",
+    user: {
+      accessToken: null,
+      refreshToken: null,
+      role: null,
+      approved: null,
+      id: 0,
+      email: "",
+      name: "",
+    },
   };
   const { email, password } = body;
   const user = await db("users").where({ email }).first();
@@ -49,18 +56,14 @@ const login = async (body: any) => {
     loggedIn.message = "User does not exist";
     return loggedIn;
   }
-  if (!user.approved) {
-    loggedIn.message = "User is not approved";
-    return loggedIn;
-  }
-  if (!user) {
-    loggedIn.message = "The user does not exist";
-    return loggedIn;
-  }
-
+  
   const match = await bcrypt.compare(password, user.password);
   if (!match) {
     loggedIn.message = "Wrong password";
+    return loggedIn;
+  }
+  if (!user.approved) {
+    loggedIn.message = "User is not approved";
     return loggedIn;
   }
 
@@ -68,14 +71,24 @@ const login = async (body: any) => {
   const refreshToken = generateRefreshToken(user);
   await db("users")
     .where({ id: user.id })
-    .update({ refresh_token: refreshToken });
+    .update({ refresh_token: refreshToken }); // save refreshtoken to db
 
-  loggedIn.token = token;
-  loggedIn.refreshToken = refreshToken;
+  setUserData(loggedIn, user, token, refreshToken);
+  
   loggedIn.success = true;
   loggedIn.message = "Login successful";
   return loggedIn;
 };
+
+const setUserData =(loggedIn:loggedIn, user:any,token:string,refreshToken:string)=>{
+  loggedIn.user.approved = user.approved;
+  loggedIn.user.role = user.role;
+  loggedIn.user.accessToken = token;
+  loggedIn.user.refreshToken = refreshToken;
+  loggedIn.user.id = user.id;
+  loggedIn.user.email = user.email;
+  return loggedIn;
+}
 
 const updateToken = async (refreshToken: string = "") => {
   let storedToken: any = "";
@@ -149,4 +162,6 @@ const approveUser = async (id: number) => {
 const listUsers = async () => {
   return await db("users").select("*");
 };
+
+
 export { updateToken, login, register, promotionUser, approveUser, listUsers };
