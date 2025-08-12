@@ -67,12 +67,13 @@ router.patch(
   "/approval",
   [authenticateToken, authorizeRoles("admin")],
   async (req: Request, res: Response) => {
-   const succeess= await approveUser(req.body.id);
-   if(succeess){
-    res.json("User approved successfully");
+ 
+   const result= await approveUser(req.body.id);
+   if(result.success){
+    res.json(result);
    }
    else{
-    res.status(400).json("User not found to approve");
+    res.status(400).json(result);
    }
   }
 );

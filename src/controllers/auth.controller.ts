@@ -91,6 +91,8 @@ const setUserData =(loggedIn:loggedIn, user:any,token:string,refreshToken:string
 }
 
 const updateToken = async (refreshToken: string = "") => {
+  console.log(refreshToken, "refreshToken");
+  
   let storedToken: any = "";
   if (refreshToken === "") return "Token not found";
   storedToken = await db("users")
@@ -105,7 +107,9 @@ const updateToken = async (refreshToken: string = "") => {
     storedToken.refresh_token,
     process.env.JWT_REFRESH_TOKEN_SECRET as string
   );
-  const newAccessToken = generateAccessToken((payload as any).id);
+  console.log(payload, "payload");
+  
+  const newAccessToken = generateAccessToken(payload );
   return newAccessToken;
 };
 
@@ -145,21 +149,27 @@ const promotionUser = async (id: number) => {
 };
 
 const approveUser = async (id: number) => {
-  let success: boolean = false;
+  const result={
+    success:false,
+    message:""
+  }
   const user = await db("users").where({ id }).first();
   if (!user) {
-    return success;
+    return result;
   }
   try {
     await db("users").where({ id }).update({ approved: true });
-    success = true;
+    result.success = true;
+    result.message = "User approved successfully";
   } catch (err) {
     console.log(err);
+    result.message = "User not found to approve";
   }
-  return success;
+  return result;
 };
 
 const listUsers = async () => {
+  
   return await db("users").select("*");
 };
 
