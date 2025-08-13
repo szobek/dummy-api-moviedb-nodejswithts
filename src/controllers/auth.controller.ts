@@ -172,5 +172,27 @@ const listUsers = async () => {
   return await db("users").select("*");
 };
 
+const deleteUser = async (id: number) => {
+  const result={
+    success:false,
+    message:""
+  }
+  const user = await db("users").where({ id }).first();
+  if (!user) {
+    result.message = "User not found to delete";
+    return result;
+  }
+  try {
+    await db("users").where({ id }).del();
+    result.success = true;
+    result.message = "User deleted successfully";
+  } catch (err) {
+    console.log(err);
+    result.message = "User not found to delete";
+  }
+  return result;
 
-export { updateToken, login, register, promotionUser, approveUser, listUsers };
+}
+
+
+export { updateToken, login, register, promotionUser, approveUser, listUsers,deleteUser };

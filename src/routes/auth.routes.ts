@@ -6,6 +6,7 @@ import {
   updateToken,
   approveUser,
   listUsers,
+  deleteUser,
 } from "../controllers/auth.controller";
 import { authenticateToken } from "../middlewares/auth.middleware";
 import { authorizeRoles } from "../middlewares/roles.middleware";
@@ -83,5 +84,15 @@ router.get('/users', [authenticateToken, authorizeRoles("admin")], async (req: R
   res.json(users);
 
 })
+
+router.delete('',[authenticateToken, authorizeRoles("admin")],async (req: Request, res: Response) => {
+  const result= await deleteUser(req.body.id);
+  if(result.success){
+    res.json(result);
+  }
+  else{
+    res.status(400).json(result);
+  }
+  })
 
 export default router;

@@ -10,7 +10,7 @@ Content-Type: application/json
 
 ### list users
 GET http://localhost:3000/api/auth/users
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzU0OTkwOTYwLCJleHAiOjE3NTQ5OTQ1NjB9.CTli6SK9BLleERGTffpUgWXxHvQuhkmyjybuz1GOn7o
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTUsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1NTA3MzIwMywiZXhwIjoxNzU1MDc2ODAzfQ.e2HwNzWgYvc36S4kUNXUzcEnYrJw7Ko4-msfHSwtRIs
 
 ### login user
 POST http://localhost:3000/api/auth/login
@@ -55,4 +55,13 @@ Content-Type: application/json
 
 {
     "id": 3
+}
+
+### delete user
+DELETE  http://localhost:3000/api/auth
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTUsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1NTA3MzIwMywiZXhwIjoxNzU1MDc2ODAzfQ.e2HwNzWgYvc36S4kUNXUzcEnYrJw7Ko4-msfHSwtRIs
+Content-Type: application/json
+
+{
+    "id": "aa"
 }
