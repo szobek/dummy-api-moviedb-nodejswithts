@@ -53,12 +53,12 @@ router.patch(
   "/promotion",
   [authenticateToken, authorizeRoles("admin")],
   async (req: Request, res: Response) => {
-   const succeess= await promotionUser(req.body.id);
-   if(succeess){
-    res.json("User promoted successfully");
+   const result= await promotionUser(req.body.id);
+   if(result.success){
+    res.json(result);
    }
    else{
-    res.status(400).json("User not found to promote");
+    res.status(400).json(result);
    }
   }
 );
