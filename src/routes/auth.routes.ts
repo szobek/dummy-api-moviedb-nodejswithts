@@ -36,7 +36,7 @@ router.put("/refresh-token", async (req: Request, res: Response) => {
   const token = await updateToken(req.headers["refresh_token"] as string);
 
   if (token) {
-    res.json({ access_token: token });
+    res.json({ accessToken: token });
   } else {
     res.status(400).json("Invalid token");
   }
