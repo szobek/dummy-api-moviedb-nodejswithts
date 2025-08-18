@@ -9,6 +9,7 @@ export async function up(knex: Knex): Promise<void> {
         table.string('refresh_token').defaultTo(null);
         table.enum('role', ['admin', 'user']).defaultTo('user');
         table.boolean('approved').defaultTo(false);
+        table.string('widget_order').defaultTo('')
         table.timestamps(true, true); // created_at and updated_at timestamps
     })
 }

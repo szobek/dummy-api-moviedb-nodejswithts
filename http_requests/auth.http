@@ -65,3 +65,17 @@ Content-Type: application/json
 {
     "id": "aa"
 }
+
+### Get dashboard component order by userid
+GET http://localhost:3000/api/auth/order-by-user/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzU1NTA2NjI0LCJleHAiOjE3NTU1MTAyMjR9.3IiJmUfM9u0es28ywscWq92jMOASSWGM_96qkkfnUQE
+
+### Set dashboard component order by userid
+PATCH  http://localhost:3000/api/auth/order-by-user
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzU1NTM2NzYzLCJleHAiOjE3NTU1NDAzNjN9.EnmZLPMJ3IASUMTp7uBp9RH0RDxiJFPNJnRCx-MEMXc
+Content-Type: application/json
+
+{
+    "id":1,
+    "order":"1,2"
+}

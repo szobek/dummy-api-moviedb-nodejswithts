@@ -56,7 +56,7 @@ const login = async (body: any) => {
     loggedIn.message = "User does not exist";
     return loggedIn;
   }
-  
+
   const match = await bcrypt.compare(password, user.password);
   if (!match) {
     loggedIn.message = "Wrong password";
@@ -74,13 +74,18 @@ const login = async (body: any) => {
     .update({ refresh_token: refreshToken }); // save refreshtoken to db
 
   setUserData(loggedIn, user, token, refreshToken);
-  
+
   loggedIn.success = true;
   loggedIn.message = "Login successful";
   return loggedIn;
 };
 
-const setUserData =(loggedIn:loggedIn, user:any,token:string,refreshToken:string)=>{
+const setUserData = (
+  loggedIn: loggedIn,
+  user: any,
+  token: string,
+  refreshToken: string
+) => {
   loggedIn.user.approved = user.approved;
   loggedIn.user.role = user.role;
   loggedIn.user.accessToken = token;
@@ -88,7 +93,7 @@ const setUserData =(loggedIn:loggedIn, user:any,token:string,refreshToken:string
   loggedIn.user.id = user.id;
   loggedIn.user.email = user.email;
   return loggedIn;
-}
+};
 
 const updateToken = async (refreshToken: string = "") => {
   let storedToken: any = "";
@@ -105,7 +110,7 @@ const updateToken = async (refreshToken: string = "") => {
     storedToken.refresh_token,
     process.env.JWT_REFRESH_TOKEN_SECRET as string
   );
-  const newAccessToken = generateAccessToken(payload );
+  const newAccessToken = generateAccessToken(payload);
   return newAccessToken;
 };
 
@@ -130,10 +135,10 @@ const generateRefreshToken = (user: any): string => {
 };
 
 const promotionUser = async (id: number) => {
-   const result={
-    success:false,
-    message:""
-  }
+  const result = {
+    success: false,
+    message: "",
+  };
   const user = await db("users").where({ id }).first();
   if (!user) {
     return result;
@@ -148,10 +153,10 @@ const promotionUser = async (id: number) => {
 };
 
 const approveUser = async (id: number) => {
-  const result={
-    success:false,
-    message:""
-  }
+  const result = {
+    success: false,
+    message: "",
+  };
   const user = await db("users").where({ id }).first();
   if (!user) {
     return result;
@@ -168,15 +173,14 @@ const approveUser = async (id: number) => {
 };
 
 const listUsers = async () => {
-  
   return await db("users").select("*");
 };
 
 const deleteUser = async (id: number) => {
-  const result={
-    success:false,
-    message:""
-  }
+  const result = {
+    success: false,
+    message: "",
+  };
   const user = await db("users").where({ id }).first();
   if (!user) {
     result.message = "User not found to delete";
@@ -191,8 +195,72 @@ const deleteUser = async (id: number) => {
     result.message = "User not found to delete";
   }
   return result;
+};
+const getWidgetOrder = async (id: string) => {
+  const result = {
+    success: false,
+    message: "",
+    widgetOrder: [],
+  };
+  try {
+    result.widgetOrder = (
+      await db("users").where({ id }).select("widget_order")
+    )
+      .splice(0, 1)[0]
+      .widget_order.split(",")
+      .map(Number);
+    result.success = true;
+    result.message = "User widget order fetched successfully";
+  } catch (err) {
+    console.log(err);
+    result.message = "User not found to fetch widget order";
+  }
+  return result;
+};
 
-}
+const setWidgetOrder = async (id: string, order: string) => {
+  const result = {
+    success: false,
+    message: "",
+  };
+  const userExist = await db("users").where({ id }).first();
+  if (!userExist) {
+    result.message = "User not found to set widget order";
+    return result;
+  }
+  if (!hasOnlyNumbersAndCommas(order)) {
+    result.message = "Wrong order data to set widget order";
+    return result;
+  }
+  if (!id || !order) {
+    result.message = "Wrong data to set widget order";
+    return result;
+  }
+  try {
+    await db("users").where({ id }).update({ widget_order: order });
+    result.success = true;
+    result.message = "User widget order set successfully";
+  } catch (err) {
+    result.message = "Error to set widget order";
+  }
+  return result;
+};
 
+const hasOnlyNumbersAndCommas = (str: string) => {
+  // Ellenőrzi, hogy a sztring elejétől a végéig
+  // csak számjegyeket (0-9) vagy vesszőt tartalmaz-e.
+  const regex = /^[0-9,]+$/;
+  return regex.test(str);
+};
 
-export { updateToken, login, register, promotionUser, approveUser, listUsers,deleteUser };
+export {
+  updateToken,
+  login,
+  register,
+  promotionUser,
+  approveUser,
+  listUsers,
+  deleteUser,
+  getWidgetOrder,
+  setWidgetOrder,
+};

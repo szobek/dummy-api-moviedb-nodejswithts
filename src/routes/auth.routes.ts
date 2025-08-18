@@ -7,6 +7,8 @@ import {
   approveUser,
   listUsers,
   deleteUser,
+  getWidgetOrder,
+  setWidgetOrder,
 } from "../controllers/auth.controller";
 import { authenticateToken } from "../middlewares/auth.middleware";
 import { authorizeRoles } from "../middlewares/roles.middleware";
@@ -95,4 +97,20 @@ router.delete('',[authenticateToken, authorizeRoles("admin")],async (req: Reques
   }
   })
 
+  router.get('/order-by-user/:id',[authenticateToken],async (req: Request, res: Response) => {
+    let cardOrders
+    const {id}=req.params;
+    if(id){
+
+      cardOrders=await getWidgetOrder(id);
+    }
+    res.json(cardOrders)
+  })
+
+  router.patch('/order-by-user',[authenticateToken],async (req: Request, res: Response) => {
+    const {id,order}=req.body;
+    const result=await setWidgetOrder(id,order);
+    res.json(result)
+
+  })
 export default router;
