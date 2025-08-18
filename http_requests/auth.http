@@ -72,10 +72,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6I
 
 ### Set dashboard component order by userid
 PATCH  http://localhost:3000/api/auth/order-by-user
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzU1NTM2NzYzLCJleHAiOjE3NTU1NDAzNjN9.EnmZLPMJ3IASUMTp7uBp9RH0RDxiJFPNJnRCx-MEMXc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzU1NTQyOTIyLCJleHAiOjE3NTU1NDY1MjJ9.t0F-PAt3Zma46CkQMvUcuADC9nMiToF-10SunpQo7iI
 Content-Type: application/json
 
 {
     "id":1,
-    "order":"1,2"
+    "order":"2,1,a"
 }

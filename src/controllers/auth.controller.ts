@@ -223,6 +223,10 @@ const setWidgetOrder = async (id: string, order: string) => {
     success: false,
     message: "",
   };
+  if (!id || !order) {
+    result.message = "Wrong data to set widget order";
+    return result;
+  }
   const userExist = await db("users").where({ id }).first();
   if (!userExist) {
     result.message = "User not found to set widget order";
@@ -232,8 +236,13 @@ const setWidgetOrder = async (id: string, order: string) => {
     result.message = "Wrong order data to set widget order";
     return result;
   }
-  if (!id || !order) {
-    result.message = "Wrong data to set widget order";
+  const orderArray = convertOrderToArray(order);
+  if (hasDuplicates(orderArray)) {
+    result.message = "duplicated id";
+    return result;
+  }
+  if (order[0] === "," || order[order.length - 1] === ",") {
+    result.message = "Wrong order string format to set widget order";
     return result;
   }
   try {
@@ -247,12 +256,17 @@ const setWidgetOrder = async (id: string, order: string) => {
 };
 
 const hasOnlyNumbersAndCommas = (str: string) => {
-  // Ellenőrzi, hogy a sztring elejétől a végéig
-  // csak számjegyeket (0-9) vagy vesszőt tartalmaz-e.
   const regex = /^[0-9,]+$/;
   return regex.test(str);
 };
 
+const convertOrderToArray = (order: string) => {
+  return order.split(",").map(Number);
+};
+
+const hasDuplicates = (arr: number[]) => {
+  return new Set(arr).size !== arr.length;
+};
 export {
   updateToken,
   login,
