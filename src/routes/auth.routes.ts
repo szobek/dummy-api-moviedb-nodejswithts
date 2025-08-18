@@ -110,7 +110,11 @@ router.delete('',[authenticateToken, authorizeRoles("admin")],async (req: Reques
   router.patch('/order-by-user',[authenticateToken],async (req: Request, res: Response) => {
     const {id,order}=req.body;
     const result=await setWidgetOrder(id,order);
-    res.json(result)
-
+    if(result.success){
+      res.json(result);
+    }
+    else{
+      res.status(400).json(result);
+    }
   })
 export default router;

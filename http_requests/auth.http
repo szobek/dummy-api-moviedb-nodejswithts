@@ -77,5 +77,5 @@ Content-Type: application/json
 
 {
     "id":1,
-    "order":"2,1,a"
+    "order":"2,1"
 }
