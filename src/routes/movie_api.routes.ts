@@ -58,6 +58,18 @@ router.get("/search", async (req, res) => {
   res.json(movies);
 });
 
+
+
+
+router.get("/movie-showings", async (req: Request, res: Response) => {
+  const movies = await getAllMovies();
+  return res.json(movies.map(movie => ({
+    id: movie.id,
+    title: movie.title,
+    showingsCount: movie.showingsCount
+  })));
+});
+
 router.get("/:id", async (req: Request, res: Response) => {
   const { id } = req.params;
   const movie = await getMovieById(id);
@@ -72,5 +84,6 @@ router.delete("/:id", authenticateToken, async (req: Request, res: Response) => 
   const deletedRow = await deleteMovieById(id);
   res.json({"message": deletedRow === 1 ? "Movie deleted successfully" : "Movie not found"});
 });
+
 
 export default router;

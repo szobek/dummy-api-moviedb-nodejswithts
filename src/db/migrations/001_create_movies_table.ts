@@ -10,6 +10,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string('director').notNullable().defaultTo('Unknown');
     table.text('description').notNullable();
     table.string('poster_url').notNullable().defaultTo('https://picsum.photos/200/300');
+    table.integer("showings_count").notNullable().defaultTo(0);
     table.timestamps(true, true); // created_at and updated_at timestamps
   });
 }
