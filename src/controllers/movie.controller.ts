@@ -2,9 +2,9 @@ import db from "../config/knex";
 import { ActorInResponseDto } from "../dtos/actor_in_response";
 import { GenreInResponseDto } from "../dtos/genre_in_response";
 import { MovieInResponseDto } from "../dtos/movie_in_response";
-import  SearcKeysInRequestDto  from "../dtos/search_keys_in_request";
+import SearcKeysInRequestDto from "../dtos/search_keys_in_request";
 import Movie from "../interfaces/movie.interface";
-import { Request } from 'express';
+import { Request } from "express";
 
 const getAllMovies = async () => {
   let dtos: MovieInResponseDto[] = [];
@@ -23,15 +23,13 @@ const getAllMovies = async () => {
   return dtos;
 };
 const getMovieById = async (id: string) => {
-  await db('movies')
-  .where({ id})
-  .increment('showings_count', 1); 
+  await db("movies").where({ id }).increment("showings_count", 1);
   const data = await getAllMovies();
   const movie = data.find((m: any) => m.id === parseInt(id));
   if (!movie) {
     return null;
   }
-  
+
   return movie;
 };
 const getAllActors = async () => {
@@ -89,13 +87,63 @@ ORDER BY
 const getAllGenres = async () => {
   let genres: string[] = [];
   try {
-    await db("genres")
-      .select("*")
-      .then((rows: any) => {
-        genres = rows.map((genre: any) => {
-          return new GenreInResponseDto(genre);
-        });
+    const query = `
+    SELECT 
+    g.name AS genre_name,
+    MAX(g.description) AS description,
+    GROUP_CONCAT(
+        DISTINCT CONCAT(
+        'id: ', m.id,
+            ' | Title: ', m.title,
+            ' | Year: ', m.year,
+            ' | Rating: ', m.rating,
+            ' | Director: ', m.director,
+            ' | Description: ', m.description,
+            ' | Actors: ', (
+                SELECT GROUP_CONCAT(DISTINCT a.fullName ORDER BY a.fullName SEPARATOR ', ')
+                FROM \`movie-actors\` ma2
+                JOIN actors a ON a.id = ma2.actor_id
+                WHERE ma2.movie_id = m.id
+            )
+        ) SEPARATOR ' ||| '
+    ) AS movies
+FROM genres g
+JOIN \`movie-genre\` mg ON g.id = mg.genre_id
+JOIN movies m ON m.id = mg.movie_id
+GROUP BY g.name
+ORDER BY g.name;`;
+    await db.raw(query).then((rows: any) => {
+      const data=rows[0].map((r: any) => {
+        const moviesArray = r.movies.split("|||");
+        return {
+          name: r.genre_name,
+          
+          description: r.description,
+          movies: moviesArray.map((movie: string) => {
+            const movieParts = movie.split("|");
+            if (movieParts.length < 7) {
+              return null;
+            }
+            const movieObj= {
+              id: parseInt(movieParts[0].replace("id: ", "").trim()),
+              title: movieParts[1].replace("Title: ", ""),
+              year: parseInt(movieParts[2].replace(" Year: ", "").trim()),
+              rating: parseFloat(movieParts[3].replace(" Rating: ", "").trim()),
+              director: movieParts[4].replace(" Director: ", ""),
+              description: movieParts[5].replace(" Description: ", ""),
+              actors: movieParts[6].replace(" Actors: ", ""),
+              poster_url: "", // Poster URL is not included in the concatenated string
+              showings_count:0 // Showings count is not included in the concatenated string
+            };
+            return new MovieInResponseDto(movieObj )
+          }),
+        };
       });
+      console.log(new GenreInResponseDto(data[0]));
+      
+      
+    });
+    return genres;
   } catch (error) {
     console.error(error);
   }
@@ -132,19 +180,22 @@ const getMoviesByGenre = async (genreId: string) => {
       m.id, m.title, m.description, m.rating, m.year
       ORDER BY
       m.rating DESC;
-      `
-  await db.raw(query, [genreId]).then((rows: any) => {
-    movies = rows[0].map((movie: any) => new MovieInResponseDto(movie));
-  }).catch((error: any) => {
-    console.error("Error fetching movies by genre:", error);
-  });
+      `;
+  await db
+    .raw(query, [genreId])
+    .then((rows: any) => {
+      movies = rows[0].map((movie: any) => new MovieInResponseDto(movie));
+    })
+    .catch((error: any) => {
+      console.error("Error fetching movies by genre:", error);
+    });
   return movies;
-}
+};
 
 const searchMovies = async (req: Request) => {
-  const searchTerm=new SearcKeysInRequestDto(req.query);
-  
-  const query:string = `
+  const searchTerm = new SearcKeysInRequestDto(req.query);
+
+  const query: string = `
   SELECT
     m.title ,
     m.description,
@@ -171,29 +222,34 @@ GROUP BY
     m.id, m.title, m.description, m.rating, m.year
 HAVING
     SUM(CASE WHEN a.fullName LIKE ? THEN 1 ELSE 0 END) > 0 
-    AND SUM(CASE WHEN g.id LIKE ? THEN 1 ELSE 0 END) > 0;`
-  
+    AND SUM(CASE WHEN g.id LIKE ? THEN 1 ELSE 0 END) > 0;`;
+
   let movies: MovieInResponseDto[] = [];
   const paramsOfQuery = Object.values(searchTerm);
-  await db.raw(query,paramsOfQuery)
+  await db
+    .raw(query, paramsOfQuery)
     .then((rows: any) => {
       movies = rows[0].map((movie: any) => new MovieInResponseDto(movie));
-    }).catch((err) => {
+    })
+    .catch((err) => {
       console.error(err);
     });
-    return movies
-}
+  return movies;
+};
 const deleteMovieById = async (id: string) => {
   let deletedRow;
   try {
-    await db("movies").where("id", id).del().then(res=>{
-      deletedRow=res;
-    });
+    await db("movies")
+      .where("id", id)
+      .del()
+      .then((res) => {
+        deletedRow = res;
+      });
   } catch (error) {
     console.log(error);
   }
   return deletedRow;
-}
+};
 
 export {
   getAllMovies,
@@ -203,5 +259,5 @@ export {
   getAllGenres,
   getMoviesByGenre,
   searchMovies,
-  deleteMovieById
+  deleteMovieById,
 };
