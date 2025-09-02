@@ -63,6 +63,9 @@ router.get("/search", async (req, res) => {
 
 router.get("/movie-showings", async (req: Request, res: Response) => {
   const movies = await getAllMovies();
+  if (!movies) {
+    return res.status(500).json({ message: "Error retrieving movies" });
+  }
   if (movies.length === 0) {
     return res.status(404).json({ message: "No movies found" });
   }
