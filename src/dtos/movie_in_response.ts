@@ -9,6 +9,7 @@ export class MovieInResponseDto {
   actors: string[];
   posterUrl: string;
   showingsCount: number;
+  comments?: string[];
 
 
   constructor(movie: any) {
@@ -22,6 +23,7 @@ export class MovieInResponseDto {
     this.actors = (movie.actors) ? movie.actors.split(',') : [];
     this.posterUrl = movie.poster_url;
     this.showingsCount = movie.showings_count;
+    this.comments = movie.comments ? movie.comments.split(' ||| ') : [];
     }
   
 }

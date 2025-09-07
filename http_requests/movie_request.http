@@ -29,3 +29,17 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhd
 
 ### get all movies showing
 GET http://localhost:3000/api/movies/movie-showings
+
+### add new movie comment
+PUT http://localhost:3000/api/movies/2/comment
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzU3MjQ3ODcwLCJleHAiOjE3NTcyNTE0NzB9.Tk3a9S82mlu7q5jt7PBSATQtqo_K6nnBFwyunfyQGqE
+Content-Type: application/json
+
+{
+    "comment": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent pretium erat erat, ut porttitor erat dapibus eu. Vivamus ut leo nisl. Praesent id est semper, condimentum quam vel, tristique risus. Phasellus sapien magna, lobortis eu ultrices lobortis, pulvinar vel felis. Nam sodales mi a risus luctus lacinia. Vestibulum molestie, nulla non aliquam consectetur, ligula enim sagittis orci, in sollicitudin magna metus eu odio. Donec quis metus vitae eros placerat luctus vitae at odio. Praesent vulputate sed tellus ut ultricies. Etiam sed ultricies enim."
+}
+
+### get movie comments
+GET http://localhost:3000/api/movies/4/comments
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzU3MjQ3ODcwLCJleHAiOjE3NTcyNTE0NzB9.Tk3a9S82mlu7q5jt7PBSATQtqo_K6nnBFwyunfyQGqE
+Content-Type: application/json

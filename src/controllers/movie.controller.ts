@@ -10,8 +10,43 @@ const getAllMovies = async () => {
   let dtos: MovieInResponseDto[] = [];
   let id: number = 0;
   try {
-    const query =
-      "SELECT  m.id AS movie_id,m.showings_count,  m.title,  m.year,  m.rating,  m.director,  m.description,  m.poster_url,  GROUP_CONCAT(DISTINCT g.name ORDER BY g.name SEPARATOR ', ') AS genres,  GROUP_CONCAT(DISTINCT a.fullName ORDER BY a.fullName SEPARATOR ', ') AS actors FROM movies AS m LEFT JOIN `movie-genre` AS mg ON m.id = mg.movie_id LEFT JOIN   genres AS g ON mg.genre_id = g.id LEFT JOIN `movie-actors` AS ma ON m.id = ma.movie_id  LEFT JOIN  actors AS a ON ma.actor_id = a.id GROUP BY m.id, m.title, m.year, m.rating, m.director, m.description, m.poster_url;";
+    const query = `SELECT 
+    m.id AS movie_id,
+    m.showings_count,
+    m.title,
+    m.year,
+    m.rating,
+    m.director,
+    m.description,
+    m.poster_url,
+    genres_agg.genres,
+    actors_agg.actors,
+    comments_agg.comments
+FROM 
+    movies AS m
+LEFT JOIN (
+    SELECT 
+        mg.movie_id, 
+        GROUP_CONCAT(DISTINCT g.name ORDER BY g.name SEPARATOR ', ') AS genres
+    FROM \`movie-genre\` AS mg
+    JOIN genres AS g ON mg.genre_id = g.id
+    GROUP BY mg.movie_id
+) AS genres_agg ON m.id = genres_agg.movie_id
+LEFT JOIN (
+    SELECT 
+        ma.movie_id, 
+        GROUP_CONCAT(DISTINCT a.fullName ORDER BY a.fullName SEPARATOR ', ') AS actors
+    FROM \`movie-actors\` AS ma
+    JOIN actors AS a ON ma.actor_id = a.id
+    GROUP BY ma.movie_id
+) AS actors_agg ON m.id = actors_agg.movie_id
+LEFT JOIN (
+    SELECT 
+        mc.movie_id, 
+        GROUP_CONCAT(mc.comment SEPARATOR ' ||| ') AS comments
+    FROM \`movie-comment\` AS mc
+    GROUP BY mc.movie_id
+) AS comments_agg ON m.id = comments_agg.movie_id;`;
     const movies: any[] = await db.raw(query);
     dtos = movies[0].map((movie: Movie) => {
       movie.id = ++id;
@@ -113,18 +148,18 @@ JOIN movies m ON m.id = mg.movie_id
 GROUP BY g.name
 ORDER BY g.name;`;
     await db.raw(query).then((rows: any) => {
-      const data=rows[0].map((r: any) => {
+      const data = rows[0].map((r: any) => {
         const moviesArray = r.movies.split("|||");
         return {
           name: r.genre_name,
-          
+
           description: r.description,
           movies: moviesArray.map((movie: string) => {
             const movieParts = movie.split("|");
             if (movieParts.length < 7) {
               return null;
             }
-            const movieObj= {
+            const movieObj = {
               id: parseInt(movieParts[0].replace("id: ", "").trim()),
               title: movieParts[1].replace("Title: ", ""),
               year: parseInt(movieParts[2].replace(" Year: ", "").trim()),
@@ -133,15 +168,13 @@ ORDER BY g.name;`;
               description: movieParts[5].replace(" Description: ", ""),
               actors: movieParts[6].replace(" Actors: ", ""),
               poster_url: "", // Poster URL is not included in the concatenated string
-              showings_count:0 // Showings count is not included in the concatenated string
+              showings_count: 0, // Showings count is not included in the concatenated string
             };
-            return new MovieInResponseDto(movieObj )
+            return new MovieInResponseDto(movieObj);
           }),
         };
       });
       console.log(new GenreInResponseDto(data[0]));
-      
-      
     });
     return genres;
   } catch (error) {
@@ -251,6 +284,21 @@ const deleteMovieById = async (id: string) => {
   return deletedRow;
 };
 
+const saveCommentToMovie = async (movieId: string, comment: string) => {
+  let response = { success: false, message: "" };
+  try {
+    await db("movie-comment")
+      .insert({ movie_id: movieId, comment })
+      .then((res) => {
+        response = { success: true, message: "Comment added successfully" };
+      });
+  } catch (error) {
+    console.log(error);
+    response = { success: false, message: "Error adding comment" };
+  }
+  return response;
+};
+
 export {
   getAllMovies,
   getMovieById,
@@ -260,4 +308,5 @@ export {
   getMoviesByGenre,
   searchMovies,
   deleteMovieById,
+  saveCommentToMovie,
 };

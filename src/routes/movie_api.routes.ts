@@ -7,6 +7,7 @@ import {
   getMovieById,
   getMoviesByActor,
   getMoviesByGenre,
+  saveCommentToMovie,
   searchMovies,
 } from "../controllers/movie.controller";
 import { authenticateToken } from "../middlewares/auth.middleware";
@@ -83,6 +84,25 @@ router.get("/:id", async (req: Request, res: Response) => {
     return res.status(404).json({ message: "Movie not found" });
   }
   res.json(movie);
+});
+
+router.put("/:id/comment", authenticateToken, async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { comment } = req.body;
+  const response=await saveCommentToMovie(id, comment);
+  if(!response.success){
+    return  res.status(500).json({ message: response.message });
+  }
+  res.json({ message: `Comment added to movie ${id}`, comment });
+});
+
+router.get("/:id/comments", async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const movie = await getMovieById(id);
+  if (!movie) {
+    return res.status(404).json({ message: "Movie not found" });
+  } 
+  res.json(movie.comments || []);
 });
 
 router.delete("/:id", authenticateToken, async (req: Request, res: Response) => {
