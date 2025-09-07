@@ -7,6 +7,7 @@ import {
   getMovieById,
   getMoviesByActor,
   getMoviesByGenre,
+  getRandomMovie,
   saveCommentToMovie,
   searchMovies,
 } from "../controllers/movie.controller";
@@ -75,6 +76,14 @@ router.get("/movie-showings", async (req: Request, res: Response) => {
     title: movie.title,
     showingsCount: movie.showingsCount
   })));
+});
+
+router.get("/random", async (req: Request, res: Response) => {
+  const movie = await getRandomMovie()
+  if (!movie) {
+    return res.status(404).json({ message: "Movie not found" });
+  } 
+  res.json(movie);
 });
 
 router.get("/:id", async (req: Request, res: Response) => {

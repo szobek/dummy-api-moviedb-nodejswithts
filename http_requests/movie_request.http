@@ -43,3 +43,6 @@ Content-Type: application/json
 GET http://localhost:3000/api/movies/4/comments
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzU3MjQ3ODcwLCJleHAiOjE3NTcyNTE0NzB9.Tk3a9S82mlu7q5jt7PBSATQtqo_K6nnBFwyunfyQGqE
 Content-Type: application/json
+
+### get random movie
+GET http://localhost:3000/api/movies/random

@@ -299,6 +299,59 @@ const saveCommentToMovie = async (movieId: string, comment: string) => {
   return response;
 };
 
+const getRandomMovie = async () => {
+  let movie: MovieInResponseDto | null = null;
+  try {
+    const query = `
+    SELECT 
+    m.id AS movie_id,
+    m.showings_count,
+    m.title,
+    m.year,
+    m.rating,
+    m.director,
+    m.description,
+    m.poster_url,
+    genres_agg.genres,
+    actors_agg.actors,
+    comments_agg.comments
+FROM 
+    movies AS m
+LEFT JOIN (
+    SELECT 
+        mg.movie_id, 
+        GROUP_CONCAT(DISTINCT g.name ORDER BY g.name SEPARATOR ', ') AS genres
+    FROM \`movie-genre\` AS mg
+    JOIN genres AS g ON mg.genre_id = g.id
+    GROUP BY mg.movie_id
+) AS genres_agg ON m.id = genres_agg.movie_id
+LEFT JOIN (
+    SELECT 
+        ma.movie_id, 
+        GROUP_CONCAT(DISTINCT a.fullName ORDER BY a.fullName SEPARATOR ', ') AS actors
+    FROM \`movie-actors\` AS ma
+    JOIN actors AS a ON ma.actor_id = a.id
+    GROUP BY ma.movie_id
+) AS actors_agg ON m.id = actors_agg.movie_id
+LEFT JOIN (
+    SELECT 
+        mc.movie_id, 
+        GROUP_CONCAT(mc.comment SEPARATOR ' ||| ') AS comments
+    FROM \`movie-comment\` AS mc
+    GROUP BY mc.movie_id
+) AS comments_agg ON m.id = comments_agg.movie_id
+order by rand()
+limit 1;`
+    const rows = await db.raw(query);
+    if (rows.length > 0) {
+      movie = new MovieInResponseDto(rows[0][0]);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+  return movie;
+};
+
 export {
   getAllMovies,
   getMovieById,
@@ -309,4 +362,5 @@ export {
   searchMovies,
   deleteMovieById,
   saveCommentToMovie,
+  getRandomMovie,
 };
